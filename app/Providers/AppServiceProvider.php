@@ -5,6 +5,10 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
+use Spatie\Health\Facades\Health;
+use Spatie\Health\Checks\Checks\OptimizedAppCheck;
+use Spatie\Health\Checks\Checks\DebugModeCheck;
+use Spatie\Health\Checks\Checks\EnvironmentCheck;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,5 +33,11 @@ class AppServiceProvider extends ServiceProvider
         Livewire::setScriptRoute(function ($handle) {
             return Route::get(''.env('APP_URL_LIVEWIRE', 'laravel/public').'/livewire/livewire.js', $handle);
         });
+
+        Health::checks([
+            OptimizedAppCheck::new(),
+            DebugModeCheck::new(),
+            EnvironmentCheck::new(),
+        ]);
     }
 }
